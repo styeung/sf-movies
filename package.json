@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "jasmine": "jasmine",
+    "jasmine": "jasmine --config=webapp/spec/support/jasmine.json",
     "build": "rm public/js/*.js* || true && webpack --progress --env=prod",
     "watch": "rm public/js/*.js* || true && webpack --watch --progress --env=dev"
   },
