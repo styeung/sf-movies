@@ -4,11 +4,12 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     'js/bundle': './js/src/index.js',
+  },
   output: {
     path: path.join(__dirname, 'src', 'main', 'resources', 'static'),
     publicPath: '/',
     filename: '[name].js',
-    libraryTarget: 'var',
+    libraryTarget: 'var'
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -16,5 +17,4 @@ module.exports = {
       filename: path.join(__dirname, 'src', 'main', 'resources', 'static', 'index.html')
     })
   ]
-};
-
+}

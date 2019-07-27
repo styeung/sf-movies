@@ -15,6 +15,8 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
+    "@testing-library/react": "^8.0.7",
+    "babel-loader": "^8.0.6",
     "compression-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
     "html-webpack-plugin": "^3.2.0",
