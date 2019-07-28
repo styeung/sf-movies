@@ -30,6 +30,26 @@ public class SfMoviesSearchTest extends FluentTest {
         goTo(domainPrefix + Integer.toString(port));
         whenIEnterTheLetterA();
         thenISeeOptionsStartingWithA();
+
+        whenIClickOnTheFirstMovie();
+        thenTheOptionsAreHidden();
+        thenISeeItsLocationsListed();
+    }
+
+    private void thenTheOptionsAreHidden() {
+        List<FluentWebElement> options = $("[data-test='option']");
+        List<FluentWebElement> visibleOptions = options.stream().filter((option) -> option.displayed())
+        assertThat(visibleOptions).isEmpty();
+    }
+
+    private void thenISeeItsLocationsListed() {
+        List<FluentWebElement> locations = $("[data-test='location-option']");
+        assertThat(locations.size()).isGreaterThan(0);
+    }
+
+    private void whenIClickOnTheFirstMovie() {
+        FluentWebElement firstOption = $("[data-test='option']").first();
+        firstOption.click();
     }
 
     private void thenISeeOptionsStartingWithA() {
