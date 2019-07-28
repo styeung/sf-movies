@@ -5,6 +5,9 @@ import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.hook.wait.Wait;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,5 +40,20 @@ public class SfMoviesSearchTest extends FluentTest {
     private void whenIEnterTheLetterA() {
         FluentWebElement searchInput = $("[data-test='search-input']").first();
         searchInput.fill().withText("a");
+    }
+
+    @Override
+    public String getWebDriver(){
+        return "chrome";
+    }
+
+    @Override
+    public Capabilities getCapabilities(){
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--disable-gpu");
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("chromeOptions", options);
+        return capabilities;
     }
 }

@@ -8,6 +8,8 @@ export default class Autocomplete extends React.Component {
       movies: []
     }
 
+    this.mapsService = new this.props.mapsServiceClass(this.props.googleMaps)
+
     this.autocompleteService = this.props.autocompleteService
     this.onChange = this.onChange.bind(this)
   }
@@ -25,7 +27,7 @@ export default class Autocomplete extends React.Component {
 
   render() {
     const options = this.state.movies.map((option) => {
-      return <div data-test="option" key={option}>{option}</div>
+      return <div data-test="option" key={option.name}>{option.name}</div>
     })
 
     return (

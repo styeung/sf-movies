@@ -9,9 +9,12 @@ configure({testIdAttribute: 'data-test'})
 describe('Autocomplete', () => {
   let component, autocompleteService, movies;
   beforeEach(() => {
-    movies = ['aardvark', 'alpha', 'bravo', 'cookie']
+    movies = [{name: 'aardvark'}, {name: 'alpha'}, {name: 'bravo'}]
     autocompleteService = new AutocompleteService(movies)
-    component = render(<Autocomplete autocompleteService={autocompleteService}/>)
+    const FakeMapsService = class {
+      drawMarkers() {}
+    }
+    component = render(<Autocomplete autocompleteService={autocompleteService} mapsServiceClass={FakeMapsService}/>)
   })
 
   afterEach(cleanup)

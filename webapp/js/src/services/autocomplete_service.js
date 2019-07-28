@@ -6,6 +6,6 @@ export default class AutocompleteService {
   }
 
   startsWith(searchTerm) {
-    return matchSorter(this.items, searchTerm, {threshold: matchSorter.rankings.STARTS_WITH})
+    return matchSorter(this.items, searchTerm, {keys: ['name'], threshold: matchSorter.rankings.STARTS_WITH})
   }
 }
