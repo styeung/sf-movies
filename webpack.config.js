@@ -6,6 +6,7 @@ var baseConfig = {
     modules: [
       'node_modules',
       path.resolve('./webapp/js/src/components'),
+      path.resolve('./webapp/js/src/services'),
     ]
   },
   module: {
