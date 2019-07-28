@@ -37,3 +37,4 @@ node_modules
 ### Generated files
 src/main/resources/static/index.html
 src/main/resources/static/js/
+webapp/js/test/test_bundle.js

@@ -26,6 +26,9 @@ var baseConfig = {
       },
     ]
   },
+  watchOptions: {
+    ignored: ['node_modules', '**/test_bundle.js', '**/support/jasmine.json', '**/test/helpers']
+  }
 }
 module.exports = function(env) {
   return Object.assign({}, baseConfig, require(`./webpack.${env}.js`));
