@@ -12,7 +12,8 @@ export default class MapsService {
 
     this.map = new googleMaps.Map(mapDiv, {
       center: sf,
-      zoom: 12
+      zoom: 12,
+      disableDefaultUI: true
     })
 
     this.placesService = new googleMaps.places.PlacesService(this.map)
@@ -23,23 +24,34 @@ export default class MapsService {
   }
 
   createMarker(locationName, latLong) {
+    const infowindow = new this.googleMaps.InfoWindow({
+      content: locationName
+    });
+
     const marker = new this.googleMaps.Marker({
       position: latLong,
       title: locationName
     })
+
+    marker.addListener('click', function() {
+      infowindow.open(this.map, marker);
+    });
 
     marker.setMap(this.map)
     this.markers.push(marker)
     this.markerMapping[locationName] = marker
   }
 
-  removeExistingMarkers() {
+  resetMap() {
     while(this.markers.length > 0) {
       let marker = this.markers.pop()
       marker.setMap(null)
       delete this.markerMapping[marker.getTitle()]
       marker = null
     }
+
+    this.map.setCenter(sf)
+    this.map.setZoom(12)
   }
 
   zoomOnMarker(markerTitle) {
@@ -49,7 +61,7 @@ export default class MapsService {
   }
   
   drawMarkers(movie) {
-    this.removeExistingMarkers()
+    this.resetMap()
 
     const {map, createMarker, zoomOnMarker, googleMaps } = this
     movie.locations.forEach((location) => {
@@ -65,8 +77,5 @@ export default class MapsService {
         }
       });
     })
-
-    map.setCenter(sf)
-    map.setZoom(12)
   }
 }

@@ -24,6 +24,8 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
+    if(this.props.options.length === 0) return null
+
     return (
       <select data-test={'location-dropdown'}
               style={dropdownStyles}

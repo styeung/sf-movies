@@ -7,7 +7,7 @@ import AutocompleteService from 'autocomplete_service'
 configure({testIdAttribute: 'data-test'})
 
 describe('Autocomplete', () => {
-  let component, autocompleteService, movies, drawMarkersSpy, zoomOnMarkerSpy, firstMovie;
+  let component, autocompleteService, movies, drawMarkersSpy, zoomOnMarkerSpy, resetMapSpy, firstMovie
 
   beforeEach(() => {
     firstMovie = {name: 'aardvark', locations: ['Golden Gate Bridge', '11 Polk Street']}
@@ -20,9 +20,14 @@ describe('Autocomplete', () => {
     autocompleteService = new AutocompleteService(movies)
     drawMarkersSpy = jasmine.createSpy('drawMarkers')
     zoomOnMarkerSpy = jasmine.createSpy('zoomOnMarker')
+    resetMapSpy = jasmine.createSpy('resetMap')
     const FakeMapsService = class {
       drawMarkers(items) {
         drawMarkersSpy(items)
+      }
+
+      resetMap() {
+        resetMapSpy()
       }
 
       zoomOnMarker(markerTitle) {
@@ -46,6 +51,9 @@ describe('Autocomplete', () => {
       expect(options.map((option) => option.textContent)).toEqual(['aardvark', 'alpha'])
     })
 
+    it('resets the map', () => {
+      expect(resetMapSpy).toHaveBeenCalled()
+    })
 
     describe('when I then click on a movie', () => {
       beforeEach(() => {
@@ -54,7 +62,7 @@ describe('Autocomplete', () => {
       })
 
       it('draws markers with the movie locations', () => {
-        expect(drawMarkersSpy).toHaveBeenCalledWith(firstMovie);
+        expect(drawMarkersSpy).toHaveBeenCalledWith(firstMovie)
       })
 
       it('hides the autocomplete options', () => {
@@ -68,7 +76,7 @@ describe('Autocomplete', () => {
         expect(locationNames).toEqual(firstMovie.locations)
       })
 
-      fdescribe('when I then select a location', () => {
+      describe('when I then select a location', () => {
         let selectedLocation
 
         beforeEach(() => {
