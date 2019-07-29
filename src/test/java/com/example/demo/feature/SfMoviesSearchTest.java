@@ -1,5 +1,6 @@
 package com.example.demo.feature;
 
+import com.example.demo.ChromeHeadlessTest;
 import org.fluentlenium.adapter.junit.FluentTest;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.hook.wait.Wait;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Wait
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SfMoviesSearchTest extends FluentTest {
+public class SfMoviesSearchTest extends ChromeHeadlessTest {
     @LocalServerPort
     private int port;
 
@@ -60,20 +61,5 @@ public class SfMoviesSearchTest extends FluentTest {
     private void whenIEnterTheLetterA() {
         FluentWebElement searchInput = $("[data-test='search-input']").first();
         searchInput.fill().withText("a");
-    }
-
-    @Override
-    public String getWebDriver(){
-        return "chrome";
-    }
-
-    @Override
-    public Capabilities getCapabilities(){
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("chromeOptions", options);
-        return capabilities;
     }
 }
