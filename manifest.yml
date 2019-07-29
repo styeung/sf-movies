@@ -1,0 +1,6 @@
+---
+applications:
+- name: sf-movies
+  path: target/sf-movies-0.0.1-SNAPSHOT.jar
+  buildpacks:
+  - java_buildpack
