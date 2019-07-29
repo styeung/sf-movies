@@ -1,6 +1,7 @@
 package com.example.demo.feature;
 
 import com.example.demo.ChromeHeadlessTest;
+import com.example.demo.config.MockRestTemplateConfiguration;
 import org.fluentlenium.adapter.junit.FluentTest;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.hook.wait.Wait;
@@ -11,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Wait
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(MockRestTemplateConfiguration.class)
 public class SfMoviesSearchTest extends ChromeHeadlessTest {
     @LocalServerPort
     private int port;

@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.config.MockRestTemplateConfiguration;
+import com.example.demo.movie.config.MoviesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,23 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(MockRestTemplateConfiguration.class)
 public class MoviesControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private RestTemplate restTemplate;
-    private MockRestServiceServer server;
-
-    @Before
-    public void setUp() throws Exception {
-        this.server = MockRestServiceServer.createServer(restTemplate);
-        URL resource = this.getClass().getResource("/stubs/sf_movie_locations.json");
-        File stubJson = new File(resource.toURI());
-        String response = FileUtils.readFileToString(stubJson, Charset.defaultCharset());
-
-        this.server.expect(requestTo("https://data.sfgov.org/resource/wwmu-gmzc.json"))
-                .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
-    }
 
     @Test
     public void getMovies_returnsAListOfMovies() throws Exception {
