@@ -3,6 +3,7 @@ package com.example.demo.movie;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MoviesRepositoryImpl implements MoviesRepository {
     private MoviesClient moviesClient;
@@ -15,8 +16,9 @@ public class MoviesRepositoryImpl implements MoviesRepository {
     public List<Movie> getMovies() {
         List<DataSFItem> items = moviesClient.getDataSFMovieLocations();
         Map<String, Movie> movieMap = titleToMovieMap(items);
+        List<Movie> result = new ArrayList<>(movieMap.values());
 
-        return new ArrayList<>(movieMap.values());
+        return result.stream().filter((item) -> !item.getLocations().isEmpty()).collect(Collectors.toList());
     }
 
     private Map<String, Movie> titleToMovieMap(List<DataSFItem> items) {
@@ -29,7 +31,11 @@ public class MoviesRepositoryImpl implements MoviesRepository {
                 movie = new Movie(movieTitle);
                 movieMap.put(movieTitle, movie);
             }
-            movie.getLocations().add(item.getLocation());
+
+            String location = item.getLocation();
+            if(location != null) {
+                movie.getLocations().add(location);
+            }
         }
 
         return movieMap;

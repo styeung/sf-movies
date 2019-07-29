@@ -2,14 +2,10 @@ package com.example.demo.feature;
 
 import com.example.demo.ChromeHeadlessTest;
 import com.example.demo.config.MockRestTemplateConfiguration;
-import org.fluentlenium.adapter.junit.FluentTest;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.hook.wait.Wait;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -36,14 +32,13 @@ public class SfMoviesSearchTest extends ChromeHeadlessTest {
         thenISeeOptionsStartingWithA();
 
         whenIClickOnTheFirstMovie();
-        thenTheOptionsAreHidden();
         thenISeeItsLocationsListed();
+        thenISeeTheLocationMarkersPlaced();
     }
 
-    private void thenTheOptionsAreHidden() {
-        List<FluentWebElement> options = $("[data-test='option']");
-        List<FluentWebElement> visibleOptions = options.stream().filter((option) -> option.displayed())
-        assertThat(visibleOptions).isEmpty();
+    private void thenISeeTheLocationMarkersPlaced() {
+        List<FluentWebElement> markers = $("img[src='https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png']");
+        assertThat(markers.size()).isGreaterThan(0);
     }
 
     private void thenISeeItsLocationsListed() {

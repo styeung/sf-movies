@@ -7,12 +7,27 @@ import AutocompleteService from 'autocomplete_service'
 configure({testIdAttribute: 'data-test'})
 
 describe('Autocomplete', () => {
-  let component, autocompleteService, movies;
+  let component, autocompleteService, movies, drawMarkersSpy, zoomOnMarkerSpy, firstMovie;
+
   beforeEach(() => {
-    movies = [{name: 'aardvark'}, {name: 'alpha'}, {name: 'bravo'}]
+    firstMovie = {name: 'aardvark', locations: ['Golden Gate Bridge', '11 Polk Street']}
+
+    movies = [
+      firstMovie,
+      {name: 'alpha', locations: ['Chinatown']},
+      {name: 'bravo', location: ['Moscone West']}
+    ]
     autocompleteService = new AutocompleteService(movies)
+    drawMarkersSpy = jasmine.createSpy('drawMarkers')
+    zoomOnMarkerSpy = jasmine.createSpy('zoomOnMarker')
     const FakeMapsService = class {
-      drawMarkers() {}
+      drawMarkers(items) {
+        drawMarkersSpy(items)
+      }
+
+      zoomOnMarker(markerTitle) {
+        zoomOnMarkerSpy(markerTitle)
+      }
     }
     component = render(<Autocomplete autocompleteService={autocompleteService} mapsServiceClass={FakeMapsService}/>)
   })
@@ -29,6 +44,43 @@ describe('Autocomplete', () => {
       const options = component.getAllByTestId('option')
       expect(options.length).toEqual(2)
       expect(options.map((option) => option.textContent)).toEqual(['aardvark', 'alpha'])
+    })
+
+
+    describe('when I then click on a movie', () => {
+      beforeEach(() => {
+        const firstOption = component.getAllByTestId('option')[0]
+        userEvent.click(firstOption)
+      })
+
+      it('draws markers with the movie locations', () => {
+        expect(drawMarkersSpy).toHaveBeenCalledWith(firstMovie);
+      })
+
+      it('hides the autocomplete options', () => {
+        const options = component.queryAllByTestId('option')
+        expect(options.length).toEqual(0)
+      })
+
+      it('populates the dropdown with the locations at which the movie was filmed', () => {
+        const locationOptions = component.queryAllByTestId('location-option')
+        const locationNames = locationOptions.map((location) => location.value)
+        expect(locationNames).toEqual(firstMovie.locations)
+      })
+
+      fdescribe('when I then select a location', () => {
+        let selectedLocation
+
+        beforeEach(() => {
+          const dropdown = component.getByTestId('location-dropdown')
+          selectedLocation = firstMovie.locations[1]
+          fireEvent.change(dropdown, {target: {value: selectedLocation}})
+        })
+
+        it('zooms in on its marker', () => {
+          expect(zoomOnMarkerSpy).toHaveBeenCalledWith(selectedLocation)
+        })
+      })
     })
   })
 
